@@ -104,7 +104,7 @@
 
 ```bash
 # 1. 获取源码并放入 Web 根目录
-unzip site_source_V1.25.zip -d /www/wwwroot/your-domain
+unzip site_source_V1.26.zip -d /www/wwwroot/your-domain
 
 # 2. 确保可写目录存在且权限正确
 chmod -R 755 /www/wwwroot/your-domain
@@ -238,7 +238,7 @@ find . -name '*.php' -not -path './releases/*' -print0 | xargs -0 -n1 php -l
 - 面向使用者的版本记录：[更新记录.txt](更新记录.txt) —— **文件名不可更改**，云更新模块依赖它提取更新说明
 - 面向开发者的变更日志：[CHANGELOG.md](CHANGELOG.md)
 
-当前版本 **V1.25**。
+当前版本 **V1.26**。
 
 ---
 
