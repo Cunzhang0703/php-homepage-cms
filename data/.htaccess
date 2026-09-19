@@ -1,0 +1,10 @@
+# 禁止 web 直接访问 data 目录（含 SQLite 库）
+# Apache 环境生效；宝塔 Nginx 请在站点配置中加入：
+#   location ^~ /data/ { deny all; }
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+</IfModule>

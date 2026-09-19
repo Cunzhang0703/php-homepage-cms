@@ -1,0 +1,55 @@
+# ============================================================
+# Nginx 站点配置示例
+# ------------------------------------------------------------
+# 用法：
+#   宝塔面板 → 网站 → 你的站点 → 设置 → 配置文件，
+#   将下面「安全防护」段落合并进 server { } 块，保存后重载 Nginx。
+#
+# 注意：Nginx 不读取 .htaccess，因此仓库内的 .htaccess 仅对 Apache 生效，
+#       Nginx 环境必须应用本示例中的规则。
+# ============================================================
+
+# ------------------------------------------------------------
+# 安全防护（必须）
+# ------------------------------------------------------------
+
+# 禁止访问敏感目录
+location ~ ^/(?:data|includes)/ { deny all; }
+
+# 禁止访问以点号开头的文件（.git、.env 等）
+location ~ /\. { deny all; }
+
+# 上传目录禁止执行任何脚本
+location ~* ^/uploads/.*\.(?:php[0-9s]?|phtml|phar|cgi|pl|py|sh)$ { deny all; }
+location ^~ /uploads/ {
+    add_header X-Content-Type-Options nosniff;
+}
+
+# 关闭目录列表
+autoindex off;
+
+# ------------------------------------------------------------
+# 安装完成后启用：封禁 install/ 目录
+# （安装过程中必须可访问，因此默认注释）
+# ------------------------------------------------------------
+# location ^~ /install/ { deny all; }
+
+# ------------------------------------------------------------
+# 静态资源缓存（可选，提升前台加载速度）
+# ------------------------------------------------------------
+location ~* \.(?:css|js|png|jpe?g|gif|webp|svg|ico|woff2?)$ {
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+    access_log off;
+}
+
+# ------------------------------------------------------------
+# PHP 处理（宝塔面板通常已自带，按需保留其一）
+# ------------------------------------------------------------
+location ~ \.php$ {
+    try_files $uri =404;
+    fastcgi_pass  unix:/tmp/php-cgi-81.sock;   # ← 改成你的 PHP 版本 socket
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include       fastcgi_params;
+}

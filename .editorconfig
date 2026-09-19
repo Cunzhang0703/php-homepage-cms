@@ -1,0 +1,22 @@
+# https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# 前端与配置类文件统一 2 空格缩进
+[*.{html,htm,css,js,json,yml,yaml}]
+indent_size = 2
+
+# Markdown 允许行尾双空格（用于换行）
+[*.md]
+trim_trailing_whitespace = false
+
+# 版本记录面向 Windows 记事本
+[更新记录.txt]
+end_of_line = crlf

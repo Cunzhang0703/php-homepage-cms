@@ -1,0 +1,34 @@
+# ============================================================
+# 根目录 Apache 配置
+# ------------------------------------------------------------
+# 说明：
+#   1. 本文件仅在 Apache 下生效；Nginx 请改用 nginx.conf.sample。
+#   2. includes/、data/、uploads/ 已有各自的 .htaccess，
+#      本文件只负责根目录层级的通用防护，不做重复拦截。
+#   3. 云更新会排除 .htaccess，新增或修改本文件后需手动同步到服务器。
+#   4. 若访问站点出现 500 错误且日志提示 "Options not allowed here"，
+#      说明主机未开放 AllowOverride Options，删除下面 Options 一行即可。
+# ============================================================
+
+# 关闭目录列表，避免 api/ 等无 index 的目录被遍历
+Options -Indexes
+
+# 禁止访问以点号开头的文件（.git、.env、.gitignore 等）与备份/日志类文件
+<FilesMatch "(^\.|\.(bak|log|sql|sqlite|ini|yml|yaml)$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ------------------------------------------------------------
+# 安装完成后，请取消下面 3 行注释以封禁 install/ 目录
+# （安装过程中必须可访问，因此默认关闭）
+# ------------------------------------------------------------
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+#     RewriteRule ^install(?:/|$) - [F,L]
+# </IfModule>

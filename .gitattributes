@@ -1,0 +1,18 @@
+# 默认按文本处理并统一为 LF，避免 Windows / Linux 之间产生无意义的整文件 diff
+* text=auto eol=lf
+
+# 二进制文件不做换行转换
+*.zip   binary
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+
+# 版本记录与安装手册面向 Windows 记事本，保留 CRLF
+更新记录.txt text eol=crlf
+
+# 语言统计与 diff 提示
+*.php   linguist-language=PHP
+*.php   diff=php

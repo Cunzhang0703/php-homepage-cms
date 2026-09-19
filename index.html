@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人主页</title>
+<meta name="description" id="metaDesc" content="个人主页">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#6366f1">
+<link rel="canonical" id="metaCanonical" href="">
+<!-- Open Graph：微信/QQ/Telegram 等分享时显示的卡片 -->
+<meta property="og:type" content="profile">
+<meta property="og:title" id="ogTitle" content="个人主页">
+<meta property="og:description" id="ogDesc" content="">
+<meta property="og:image" id="ogImage" content="">
+<meta property="og:url" id="ogUrl" content="">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json" id="ldJson">{"@context":"https://schema.org","@type":"Person","name":""}</script>
+
+<style>
+
+  :root{
+    --glass-bg: rgba(255,255,255,0.18);
+    --glass-border: rgba(255,255,255,0.35);
+    --text: #1f2937;
+    --text-soft: #4b5563;
+    --accent: #6366f1;
+    --link: #3730a3;
+    --tag-bg: rgba(255,255,255,0.4);
+    --tag-border: rgba(255,255,255,0.5);
+    --btn-bg: rgba(255,255,255,0.28);
+    --btn-border: rgba(255,255,255,0.45);
+    --btn-hover: rgba(255,255,255,0.45);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    padding:32px 18px;
+    position:relative;
+    overflow-x:hidden;
+    background:linear-gradient(125deg,#a5b4fc,#c4b5fd,#f0abfc,#fda4af,#a5b4fc);
+    background-size:300% 300%;
+  }
+
+  .orb{position:fixed;filter:blur(58px);opacity:.6;z-index:0;
+    border-radius:42% 58% 63% 37% / 41% 44% 56% 59%;}
+  .orb.o1{width:400px;height:400px;background:#818cf8;top:-90px;left:-70px;}
+  .orb.o2{width:360px;height:360px;background:#f472b6;bottom:-70px;right:-50px;}
+  .orb.o3{width:320px;height:320px;background:#38bdf8;top:32%;right:14%;}
+  .orb.o4{width:280px;height:280px;background:#fbbf24;bottom:18%;left:8%;opacity:.45;}
+
+  .card{
+    position:relative;z-index:1;
+    width:100%;max-width:min(480px,92vw);
+    margin:auto;
+    overflow:hidden;
+    background:var(--glass-bg);
+    backdrop-filter:blur(24px) saturate(170%);
+    -webkit-backdrop-filter:blur(24px) saturate(170%);
+    border:1px solid var(--glass-border);
+    border-radius:28px;
+    box-shadow:0 12px 40px rgba(31,41,55,0.18), inset 0 1px 1px rgba(255,255,255,0.55);
+    padding:clamp(28px,6vw,40px) clamp(20px,5vw,32px);
+    text-align:center;
+  }
+
+  .avatar{
+    position:relative;overflow:hidden;
+    width:clamp(84px,22vw,104px);height:clamp(84px,22vw,104px);margin:0 auto 18px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#818cf8,#f472b6);
+    border:3px solid rgba(255,255,255,0.6);
+    box-shadow:0 8px 24px rgba(99,102,241,0.35);
+    display:flex;align-items:center;justify-content:center;
+    font-size:38px;font-weight:600;color:#fff;
+  }
+  .avatar-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .name{font-size:clamp(22px,6vw,27px);font-weight:700;letter-spacing:.5px;}
+  .role{margin-top:8px;font-size:14px;color:var(--text-soft);font-weight:500;}
+  .divider{width:48px;height:3px;border-radius:3px;background:var(--accent);margin:20px auto;opacity:.8;}
+  .bio{font-size:14.5px;line-height:1.85;color:var(--text-soft);text-align:justify;}
+  .bio-from{font-size:12.5px;line-height:1.6;color:var(--text-soft);opacity:.8;margin-top:10px;text-align:right;}
+
+  .tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:22px 0 4px;}
+  .tag{
+    font-size:12.5px;padding:6px 14px;border-radius:999px;
+    background:var(--tag-bg);border:1px solid var(--tag-border);
+    color:var(--text);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  }
+
+  .links{display:flex;flex-direction:column;gap:12px;margin-top:26px;}
+  .links a, .links .copy-btn{
+    display:flex;align-items:center;gap:10px;justify-content:center;
+    text-decoration:none;color:var(--text);font-size:14.5px;font-weight:500;
+    padding:12px 18px;border-radius:16px;
+    max-width:100%;overflow-wrap:anywhere;text-align:center;
+    background:var(--btn-bg);
+    border:1px solid var(--btn-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transition:transform .18s ease,background .18s ease;
+    font-family:inherit;cursor:pointer;
+  }
+  .links a:hover, .links .copy-btn:hover{transform:translateY(-2px);background:var(--btn-hover);}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:3px;}
+  .links a .ico, .links .copy-btn .ico{font-size:17px;}
+  .wxid{font-weight:600;}
+  .copy-hint{font-size:11px;opacity:.55;margin-left:2px;}
+
+  /* ===== 通用区块标题 ===== */
+  .sec{margin-top:30px;}
+  .sec[hidden]{display:none;}
+  .sec-title{
+    display:flex;align-items:center;gap:8px;justify-content:center;
+    font-size:13px;font-weight:700;letter-spacing:2px;color:var(--text-soft);
+    text-transform:uppercase;margin-bottom:16px;
+  }
+  .sec-title::before,.sec-title::after{
+    content:"";flex:1;height:1px;background:rgba(255,255,255,0.45);max-width:60px;
+  }
+
+  /* ===== 作品墙 ===== */
+  .works{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  .work{
+    display:block;text-decoration:none;color:var(--text);text-align:left;
+    background:var(--btn-bg);border:1px solid var(--btn-border);border-radius:16px;
+    overflow:hidden;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transition:transform .18s ease,background .18s ease;
+  }
+  .work:hover{transform:translateY(-3px);background:var(--btn-hover);}
+  .work .cover{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:rgba(255,255,255,.25);}
+  .work .wbody{padding:11px 13px 13px;}
+  .work .wt{font-size:14px;font-weight:600;line-height:1.4;}
+  .work .ws{font-size:12px;line-height:1.6;color:var(--text-soft);margin-top:4px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .work .wtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+  .work .wtag{font-size:10.5px;padding:2px 8px;border-radius:999px;background:var(--tag-bg);border:1px solid var(--tag-border);}
+
+  /* ===== 留言板 ===== */
+  .gb-form{display:flex;flex-direction:column;gap:9px;}
+  .gb-form .row2{display:flex;gap:9px;}
+  .gb-form input,.gb-form textarea{
+    width:100%;font-family:inherit;font-size:13.5px;color:var(--text);
+    padding:10px 13px;border-radius:13px;
+    background:var(--btn-bg);border:1px solid var(--btn-border);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);outline:none;
+  }
+  .gb-form input::placeholder,.gb-form textarea::placeholder{color:var(--text-soft);opacity:.65;}
+  .gb-form input:focus,.gb-form textarea:focus{border-color:var(--accent);}
+  .gb-form textarea{resize:vertical;min-height:74px;line-height:1.7;}
+  .gb-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  .gb-form button{
+    align-self:center;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+    padding:10px 30px;border-radius:13px;color:#fff;border:1px solid transparent;
+    background:var(--accent);transition:transform .18s ease,opacity .18s ease;
+  }
+  .gb-form button:hover{transform:translateY(-2px);}
+  .gb-form button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+  .gb-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+  .gb-item{
+    text-align:left;padding:12px 14px;border-radius:14px;
+    background:rgba(255,255,255,0.22);border:1px solid var(--btn-border);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  .gb-item .gh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .gb-item .gn{font-size:13px;font-weight:700;}
+  .gb-item .gt{font-size:11px;color:var(--text-soft);opacity:.75;}
+  .gb-item .gc{font-size:13.5px;line-height:1.75;margin-top:5px;white-space:pre-wrap;word-break:break-word;}
+  .gb-item .gr{
+    font-size:12.5px;line-height:1.7;margin-top:8px;padding:7px 10px;border-radius:10px;
+    background:rgba(255,255,255,0.28);border-left:3px solid var(--accent);white-space:pre-wrap;word-break:break-word;
+  }
+  .gb-item .gr b{color:var(--accent);}
+  .gb-empty{font-size:12.5px;color:var(--text-soft);opacity:.8;margin-top:12px;}
+
+  .site-footer{margin-top:28px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.4);
+    font-size:12px;color:var(--text-soft);line-height:2;text-align:center;}
+  .site-footer .copyright{font-weight:600;color:var(--text);font-size:12.5px;}
+  .beian-link{color:var(--link);text-decoration:none;font-weight:600;letter-spacing:.3px;}
+  .beian-link:hover{text-decoration:underline;}
+  .beian-icon{display:inline-block;height:14px;width:14px;margin-right:5px;vertical-align:-2px;
+    border-radius:3px;background:#1d4ed8;color:#fff;font-size:9px;line-height:14px;text-align:center;}
+
+  @media (max-width:480px){
+    body{padding:20px 12px;}
+    .card{padding:26px 18px 22px;border-radius:22px;}
+    .avatar{margin-bottom:14px;}
+    .bio{font-size:14px;line-height:1.8;}
+    .tags{gap:7px;margin:18px 0 2px;}
+    .tag{padding:5px 12px;font-size:12px;}
+    .links{margin-top:22px;gap:10px;}
+    .links a{padding:11px 14px;font-size:14px;gap:8px;}
+    .site-footer{margin-top:22px;padding-top:14px;}
+    .sec{margin-top:24px;}
+    .works{grid-template-columns:1fr;gap:10px;}
+    .gb-form .row2{flex-direction:column;gap:9px;}
+  }
+  @media (max-width:340px){
+    .links a{font-size:13px;padding:10px 12px;}
+    .name{letter-spacing:0;}
+  }
+  @media (min-width:1024px){
+    body{padding:48px 24px;}
+  }
+
+  [data-theme="dark"]{
+    --glass-bg: rgba(30,30,55,0.35);
+    --glass-border: rgba(255,255,255,0.16);
+    --text:#f1f5f9;
+    --text-soft:#cbd5e1;
+    --accent:#a5b4fc;
+    --link:#c7d2fe;
+    --tag-bg: rgba(255,255,255,0.10);
+    --tag-border: rgba(255,255,255,0.22);
+    --btn-bg: rgba(255,255,255,0.10);
+    --btn-border: rgba(255,255,255,0.22);
+    --btn-hover: rgba(255,255,255,0.20);
+  }
+  [data-theme="dark"] body{
+    background-image:linear-gradient(125deg,#1e1b4b,#312e81,#4c1d95,#831843,#1e1b4b);
+  }
+  [data-theme="dark"] .orb.o1{background:#6366f1;}
+  [data-theme="dark"] .orb.o2{background:#db2777;}
+  [data-theme="dark"] .orb.o3{background:#0ea5e9;}
+  [data-theme="dark"] .orb.o4{background:#7c3aed;opacity:.4;}
+
+  .theme-switch{position:fixed;top:18px;right:18px;z-index:10;}
+  .theme-toggle{
+    display:flex;align-items:center;gap:6px;
+    padding:8px 14px;border-radius:999px;cursor:pointer;
+    font-family:inherit;font-size:13px;font-weight:600;color:var(--text);
+    background:var(--glass-bg);border:1px solid var(--glass-border);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:0 4px 14px rgba(0,0,0,0.12);
+    transition:transform .18s ease,background .18s ease;
+  }
+  .theme-toggle:hover{transform:translateY(-1px);background:var(--btn-hover);}
+  .theme-toggle .caret{font-size:10px;opacity:.7;margin-left:1px;}
+  .theme-menu{
+    position:absolute;top:calc(100% + 8px);right:0;min-width:132px;
+    list-style:none;margin:0;padding:6px;
+    background:var(--glass-bg);border:1px solid var(--glass-border);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.18);
+    opacity:0;visibility:hidden;transform:translateY(-8px);
+    transition:opacity .2s ease,transform .2s ease,visibility .2s;
+  }
+  .theme-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
+  .theme-menu li{
+    list-style:none;
+  }
+  .theme-menu button{
+    display:flex;align-items:center;gap:8px;
+    width:100%;padding:9px 12px;border:0;border-radius:11px;cursor:pointer;text-align:left;
+    font-size:13.5px;font-weight:500;color:var(--text);white-space:nowrap;
+    font-family:inherit;background:transparent;transition:background .15s ease;
+  }
+  .theme-menu button:hover{background:var(--btn-hover);}
+  .theme-menu button .mi-ico{font-size:15px;}
+  .theme-menu button .check{margin-left:auto;opacity:0;color:var(--accent);font-weight:700;}
+  .theme-menu button.active{background:var(--btn-bg);}
+  .theme-menu button.active .check{opacity:1;}
+
+
+  .toast{
+    position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(20px);
+    background:rgba(17,24,39,0.92);color:#fff;padding:10px 18px;border-radius:12px;
+    font-size:13px;z-index:60;opacity:0;pointer-events:none;
+    transition:opacity .25s ease,transform .25s ease;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .admin-fab{
+    position:fixed;right:18px;bottom:18px;z-index:30;
+    width:46px;height:46px;border-radius:50%;
+    display:none;align-items:center;justify-content:center;font-size:20px;cursor:pointer;
+    background:var(--glass-bg);border:1px solid var(--glass-border);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.18);color:var(--text);
+  }
+  .admin-fab{text-decoration:none;}
+  .admin-fab.show{display:flex;}
+  .admin-fab:hover{background:var(--btn-hover);}
+  [data-theme="dark"] .gb-item{background:rgba(255,255,255,0.08);}
+  [data-theme="dark"] .gb-item .gr{background:rgba(255,255,255,0.10);}
+  [data-theme="dark"] .gb-form input,
+  [data-theme="dark"] .gb-form textarea{background:rgba(255,255,255,0.10);}
+  [data-theme="dark"] .work{background:rgba(255,255,255,0.08);}
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    .card{background:rgba(255,255,255,.90);}
+    .links a,.links .copy-btn,.work,.gb-item,.theme-toggle,.theme-menu,.gb-form input,.gb-form textarea{background:rgba(255,255,255,.84);}
+    [data-theme="dark"] .card,[data-theme="dark"] .links a,[data-theme="dark"] .links .copy-btn,[data-theme="dark"] .work,[data-theme="dark"] .gb-item,[data-theme="dark"] .theme-toggle,[data-theme="dark"] .theme-menu,[data-theme="dark"] .gb-form input,[data-theme="dark"] .gb-form textarea{background:#25253f;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important;}
+    .orb{display:none;}
+  }
+  @media (max-width:480px){.orb{filter:blur(40px);opacity:.38;}.orb.o3,.orb.o4{display:none;}}
+</style>
+</head>
+<body>
+
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+  <div class="orb o4"></div>
+
+  <div class="theme-switch">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="切换主题：自适应/浅色/深色">
+      <span id="themeIcon">🌐</span><span id="themeText">自适应</span><span class="caret">▾</span>
+    </button>
+    <ul class="theme-menu" id="themeMenu" role="menu">
+      <li role="none"><button type="button" role="menuitemradio" aria-checked="true" data-mode="auto"><span class="mi-ico">🌐</span>自适应<span class="check">✓</span></button></li>
+      <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-mode="light"><span class="mi-ico">☀️</span>浅色<span class="check">✓</span></button></li>
+      <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-mode="dark"><span class="mi-ico">🌙</span>深色<span class="check">✓</span></button></li>
+    </ul>
+  </div>
+
+  <main class="card">
+    <div class="avatar" id="avatar">名</div>
+
+    <h1 class="name" id="name">你的名字</h1>
+    <p class="role" id="role">一句话头衔 / 职业</p>
+
+    <div class="divider"></div>
+
+    <p class="bio" id="bio">这里写一句或一段简短的自我介绍。例如：从事 XX 学科教学 X 年，相信"好的教育是被看见"；喜欢把课堂变成可以探索的小世界，也喜欢在课余写点东西、做点小工具。</p>
+    <p class="bio-from" id="bioFrom"></p>
+
+    <div class="tags" id="tags">
+      <span class="tag">学科教学</span>
+      <span class="tag">课程设计</span>
+      <span class="tag">阅读</span>
+      <span class="tag">摄影</span>
+      <span class="tag">折腾小工具</span>
+    </div>
+
+    <nav class="links" id="links">
+      <a href="mailto:yangcun0703@163.com"><span class="ico">✉️</span> 邮箱：yangcun0703@163.com</a>
+      <button type="button" class="copy-btn" data-copy="DJ-0703-DJ"><span class="ico">💬</span> 微信：<span class="wxid">DJ-0703-DJ</span><span class="copy-hint">点击复制</span></button>
+      <a href="./"><span class="ico">💭</span> 我在考虑</a>
+      <a href="./"><span class="ico">📖</span> 博客 / 作品集</a>
+    </nav>
+
+    <section class="sec" id="worksSec" hidden>
+      <h2 class="sec-title">作品 / 项目</h2>
+      <div class="works" id="works"></div>
+    </section>
+
+    <section class="sec" id="gbSec" hidden>
+      <h2 class="sec-title">留言板</h2>
+      <form class="gb-form" id="gbForm" autocomplete="off">
+        <div class="row2">
+          <label class="sr-only" for="gbName">你的昵称（必填）</label><input type="text" id="gbName" name="nickname" placeholder="你的昵称 *" maxlength="20" required>
+          <label class="sr-only" for="gbContact">邮箱或微信（选填，不公开）</label><input type="text" id="gbContact" name="contact" placeholder="邮箱 / 微信（选填，不公开）" maxlength="60">
+        </div>
+        <label class="sr-only" for="gbContent">留言内容（必填）</label><textarea id="gbContent" name="content" placeholder="说点什么吧…（最多 500 字）" maxlength="500" required></textarea>
+        <input class="hp" type="text" name="website" id="gbHp" tabindex="-1" aria-hidden="true">
+        <button type="submit" id="gbSubmit">发送留言</button>
+      </form>
+      <div class="gb-list" id="gbList"></div>
+      <p class="gb-empty" id="gbEmpty" hidden>还没有留言，来抢沙发 🛋</p>
+    </section>
+
+    <footer class="site-footer">
+      <p class="copyright" id="copyright">© 2026 你的名字</p>
+      <p><a class="beian-link" id="beianIcp" href="https://beian.miit.gov.cn" target="_blank" rel="noopener">京ICP备00000000号-1</a></p>
+      <p><a class="beian-link" id="beianPolice" href="https://beian.mps.gov.cn" target="_blank" rel="noopener"><span class="beian-icon">公</span>京公网安备 00000000000000号</a></p>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- 后台入口：访问 ?admin=1 时出现，直接跳转真实后台（唯一数据源，改完立即全站生效） -->
+  <a class="admin-fab" id="adminFab" href="./admin/" title="管理后台" aria-label="管理后台">⚙</a>
+
+  <script>
+
+  function $(id){ return document.getElementById(id); }
+  // localStorage 容错（沙箱/隐私模式可能抛错）
+  function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+  function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+  function safeLink(value){
+    try {
+      var url=new URL(String(value||'./'), location.href);
+      return /^(https?:)$/.test(url.protocol) ? url.href : './';
+    } catch(e){ return './'; }
+  }
+
+  var DEFAULT_CONFIG = {
+    title:'个人主页',
+    name:'你的名字',
+    role:'一句话头衔 / 职业',
+    bio:'这里写一句或一段简短的自我介绍。例如：从事 XX 学科教学 X 年，相信"好的教育是被看见"；喜欢把课堂变成可以探索的小世界，也喜欢在课余写点东西、做点小工具。',
+    tags:['学科教学','课程设计','阅读','摄影','折腾小工具'],
+    email:'yangcun0703@163.com',
+    wechat:'DJ-0703-DJ',
+    links:[
+      {text:'我在考虑', href:'./', ico:'💭'},
+      {text:'博客 / 作品集', href:'./', ico:'📖'}
+    ],
+    copyrightYear:'2026',
+    copyrightName:'你的名字',
+    icp:'京ICP备00000000号-1',
+    police:'京公网安备 00000000000000号',
+    accent:'',
+    useHitokoto:true,
+    works:[],
+    guestbook:false
+  };
+  // 后端接口自动取当前站点域名（含子目录），部署到任意域名/IP 都不用手改
+  // 统一带 .php 后缀，命中 Baota/任意 PHP 环境的 location ~ \.php 规则，避免依赖扩展名隐藏(伪静态)导致 404
+  var API_URL = (window.HOME_API || (window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '') + '/api/site.php'));
+  var currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+
+  function loadConfig(){
+    var raw = lsGet('home_config');
+    if(!raw) return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    try {
+      var c = JSON.parse(raw);
+      for(var k in DEFAULT_CONFIG){ if(c[k]===undefined) c[k]=DEFAULT_CONFIG[k]; }
+      return c;
+    } catch(e){ return JSON.parse(JSON.stringify(DEFAULT_CONFIG)); }
+  }
+  function saveConfig(cfg){ lsSet('home_config', JSON.stringify(cfg)); }
+
+  function mapApiToConfig(d){
+    var FALLBACK_ICO=['💭','📖','🔗','⭐','📮','🎧'];
+    var links=(d.links||[]).map(function(l,i){
+      return { text:l.text||'', href:l.href||'./', ico: l.icon || FALLBACK_ICO[i] || '🔗', note: l.note||'' };
+    });
+    return {
+      works: Array.isArray(d.works)?d.works:[],
+      guestbook: !!d.guestbook,
+      title: d.title||'',
+      name: d.name||'',
+      role: d.role||'',
+      bio: d.bio||'',
+      tags: Array.isArray(d.tags)?d.tags:[],
+      email: d.email||'',
+      wechat: d.wechat||'',
+      links: links,
+      copyrightYear: d.copyright?d.copyright.year:'',
+      copyrightName: d.copyright?d.copyright.name:'',
+      icp: d.icp||'',
+      police: d.police||'',
+      accent: d.accent||'',
+      avatar: d.avatar||'',
+      useHitokoto: !!d.useHitokoto
+    };
+  }
+  function fetchSiteConfig(){
+    return fetch(API_URL, {cache:'default', credentials:'same-origin'})
+      .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
+      .then(function(d){ if(!d || typeof d!=='object') throw new Error('bad payload'); return mapApiToConfig(d); })
+      .catch(function(e){ throw e; });
+  }
+
+  function applyConfig(cfg, runHitokoto){
+    if(cfg.title) document.title = cfg.title;
+    $('name').textContent = cfg.name || '';
+    $('role').textContent = cfg.role || '';
+    var avatarEl = $('avatar');
+    if (cfg.avatar) {
+      avatarEl.innerHTML = '<img class="avatar-img" src="' + escapeHtml(cfg.avatar) + '" alt="头像" width="104" height="104" decoding="async" onerror="this.style.display=\'none\'">';
+    } else {
+      avatarEl.textContent = ((cfg.name || '我').trim().charAt(0)) || '我';
+    }
+    $('bio').textContent = cfg.bio || '';
+    var tagsEl = $('tags'); tagsEl.innerHTML = '';
+    (cfg.tags||[]).forEach(function(t){
+      if(!t) return;
+      var s=document.createElement('span'); s.className='tag'; s.textContent=t; tagsEl.appendChild(s);
+    });
+    var linksEl = $('links'); linksEl.innerHTML = '';
+    if(cfg.email){
+      var email=document.createElement('a');
+      email.href='mailto:'+(cfg.email||'');
+      email.innerHTML='<span class="ico">✉️</span> 邮箱：'+escapeHtml(cfg.email||'');
+      linksEl.appendChild(email);
+    }
+    if(cfg.wechat){
+      var wx=document.createElement('button'); wx.type='button'; wx.className='copy-btn';
+      wx.setAttribute('data-copy', cfg.wechat||'');
+      wx.innerHTML='<span class="ico">💬</span> 微信：<span class="wxid">'+escapeHtml(cfg.wechat||'')+'</span><span class="copy-hint">点击复制</span>';
+      linksEl.appendChild(wx);
+    }
+    (cfg.links||[]).forEach(function(l){
+      var a=document.createElement('a'); a.href=safeLink(l.href);
+      if(/^https?:\/\//i.test(a.href) && a.hostname !== location.hostname){
+        a.target='_blank'; a.rel='noopener noreferrer';
+      }
+      if(l.note) a.title=l.note;
+      a.innerHTML='<span class="ico">'+escapeHtml(l.ico||'🔗')+'</span> '+escapeHtml(l.text||'');
+      linksEl.appendChild(a);
+    });
+    bindCopy();
+    renderWorks(cfg.works||[]);
+    applySeo(cfg);
+    $('copyright').textContent = '© ' + (cfg.copyrightYear||'') + ' ' + (cfg.copyrightName||'');
+    $('beianIcp').textContent = cfg.icp || '';
+    $('beianPolice').innerHTML = '<span class="beian-icon">公</span>' + escapeHtml(cfg.police||'');
+    if(cfg.accent){ document.documentElement.style.setProperty('--accent', cfg.accent); }
+    else { document.documentElement.style.removeProperty('--accent'); }
+    if(runHitokoto && cfg.useHitokoto){ fetchHitokoto(); }
+  }
+
+  // ===== 作品墙 =====
+  function renderWorks(works){
+    var sec=$('worksSec'), box=$('works');
+    if(!sec||!box) return;
+    box.innerHTML='';
+    if(!works || !works.length){ sec.hidden=true; return; }
+    works.forEach(function(w){
+      var el=document.createElement(w.url ? 'a' : 'div');
+      el.className='work';
+      if(w.url){
+        el.href=safeLink(w.url);
+        if(/^https?:\/\//i.test(el.href) && el.hostname !== location.hostname){ el.target='_blank'; el.rel='noopener noreferrer'; }
+      }
+      var html='';
+      if(w.cover){ html+='<img class="cover" src="'+escapeHtml(w.cover)+'" alt="'+escapeHtml(w.title||'')+'" loading="lazy" decoding="async" fetchpriority="low" onerror="this.style.display=\'none\'">'; }
+      html+='<div class="wbody"><div class="wt">'+escapeHtml(w.title||'')+'</div>';
+      if(w.summary){ html+='<div class="ws">'+escapeHtml(w.summary)+'</div>'; }
+      if(w.tags && w.tags.length){
+        html+='<div class="wtags">'+w.tags.map(function(t){ return '<span class="wtag">'+escapeHtml(t)+'</span>'; }).join('')+'</div>';
+      }
+      html+='</div>';
+      el.innerHTML=html;
+      box.appendChild(el);
+    });
+    sec.hidden=false;
+  }
+
+  // ===== SEO：把后台配置同步到 meta / OG / 结构化数据 =====
+  function applySeo(cfg){
+    var desc=(cfg.bio||cfg.role||cfg.title||'').replace(/\s+/g,' ').slice(0,150);
+    var url=location.origin+location.pathname;
+    var img=cfg.avatar ? (/^https?:\/\//i.test(cfg.avatar) ? cfg.avatar : url.replace(/\/[^/]*$/,'/')+cfg.avatar) : '';
+    function set(id, attr, val){ var el=$(id); if(el && val) el.setAttribute(attr, val); }
+    set('metaDesc','content',desc);
+    set('metaCanonical','href',url);
+    set('ogTitle','content',cfg.title||cfg.name||'');
+    set('ogDesc','content',desc);
+    set('ogUrl','content',url);
+    set('ogImage','content',img);
+    var ld=$('ldJson');
+    if(ld){
+      ld.textContent=JSON.stringify({
+        '@context':'https://schema.org','@type':'Person',
+        name:cfg.name||'', jobTitle:cfg.role||'', description:desc,
+        url:url, image:img||undefined, email:cfg.email?('mailto:'+cfg.email):undefined
+      });
+    }
+  }
+
+  // ===== 留言板 =====
+  var GB_URL = API_URL.replace(/\/site\.php$/, '/guestbook.php');
+  function fmtTime(s){
+    if(!s) return '';
+    return String(s).replace('T',' ').slice(0,16);
+  }
+  function renderGuestbook(list){
+    var box=$('gbList'), empty=$('gbEmpty');
+    if(!box) return;
+    box.innerHTML='';
+    if(!list || !list.length){ if(empty) empty.hidden=false; return; }
+    if(empty) empty.hidden=true;
+    list.forEach(function(m){
+      var d=document.createElement('div'); d.className='gb-item';
+      var h=document.createElement('div'); h.className='gh';
+      var n=document.createElement('span'); n.className='gn'; n.textContent=m.name||'匿名';
+      var t=document.createElement('span'); t.className='gt'; t.textContent=fmtTime(m.time);
+      h.appendChild(n); h.appendChild(t);
+      var c=document.createElement('div'); c.className='gc'; c.textContent=m.content||'';
+      d.appendChild(h); d.appendChild(c);
+      if(m.reply){
+        var r=document.createElement('div'); r.className='gr';
+        var b=document.createElement('b'); b.textContent='站长回复：';
+        var rt=document.createElement('span'); rt.textContent=m.reply;
+        r.appendChild(b); r.appendChild(rt); d.appendChild(r);
+      }
+      box.appendChild(d);
+    });
+  }
+  function loadGuestbook(){
+    fetch(GB_URL, {cache:'no-store'})
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(d && d.ok) renderGuestbook(d.list||[]); })
+      .catch(function(){ var empty=$('gbEmpty'); if(empty){ empty.textContent='留言暂时加载失败，请稍后刷新页面重试。'; empty.hidden=false; } });
+  }
+  function initGuestbook(enabled){
+    var sec=$('gbSec'), form=$('gbForm');
+    if(!sec||!form) return;
+    if(!enabled){ sec.hidden=true; return; }
+    sec.hidden=false;
+    loadGuestbook();
+    if(form.dataset.bound==='1') return;
+    form.dataset.bound='1';
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var btn=$('gbSubmit');
+      var name=$('gbName').value.trim(), content=$('gbContent').value.trim();
+      if(!name || !content){ showToast('昵称和留言内容不能为空'); return; }
+      btn.disabled=true; btn.textContent='发送中…';
+      var body=new FormData();
+      body.append('nickname', name);
+      body.append('contact', $('gbContact').value.trim());
+      body.append('content', content);
+      body.append('website', $('gbHp').value);   // 蜜罐
+      fetch(GB_URL, {method:'POST', body:body, cache:'no-store'})
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          showToast((d&&d.msg) || (d&&d.ok?'提交成功':'提交失败'));
+          if(d && d.ok){ $('gbContent').value=''; if(d.auto) loadGuestbook(); }
+        })
+        .catch(function(){ showToast('网络异常，请稍后再试'); })
+        .finally(function(){ btn.disabled=false; btn.textContent='发送留言'; });
+    });
+  }
+
+  function fetchHitokoto(){
+    var bio=$('bio'), from=$('bioFrom');
+    fetch('https://v1.hitokoto.cn/')
+      .then(function(r){ if(!r.ok) throw new Error('bad'); return r.json(); })
+      .then(function(d){
+        if(d&&d.hitokoto) bio.textContent=d.hitokoto;
+        var src='';
+        if(d.from_who) src+=d.from_who;
+        if(d.from) src+=(d.from_who?'《'+d.from+'》':d.from);
+        from.textContent=src?('— '+src):'';
+      })
+      .catch(function(){});
+  }
+
+  function bindCopy(){
+    var btn=document.querySelector('.copy-btn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){ copyText(btn.getAttribute('data-copy')||''); });
+  }
+  function copyText(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text)
+        .then(function(){ showToast('已复制微信号：'+text); })
+        .catch(function(){ fallbackCopy(text); });
+    } else { fallbackCopy(text); }
+  }
+  function fallbackCopy(text){
+    var ta=document.createElement('textarea');
+    ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('已复制微信号：'+text); }
+    catch(e){ showToast('复制失败，请手动复制：'+text); }
+    document.body.removeChild(ta);
+  }
+  var toastTimer;
+  function showToast(msg){
+    var t=$('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){ t.classList.remove('show'); }, 1800);
+  }
+
+  (function(){
+    var root=document.documentElement, btn=$('themeToggle'), menu=$('themeMenu');
+    var icon=$('themeIcon'), text=$('themeText');
+    var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+    var items=menu.querySelectorAll('[data-mode]');
+    var current='auto';
+    var LABEL={ auto:{icon:'🌐',text:'自适应'}, light:{icon:'☀️',text:'浅色'}, dark:{icon:'🌙',text:'深色'} };
+    function systemDark(){ return !!(mq&&mq.matches); }
+    function applyMode(mode, fromUser){
+      var dark=(mode==='dark')||(mode==='auto'&&systemDark());
+      if(dark){ root.setAttribute('data-theme','dark'); } else { root.removeAttribute('data-theme'); }
+      var l=LABEL[mode]; icon.textContent=l.icon; text.textContent=l.text;
+      for(var i=0;i<items.length;i++){
+        var selected=items[i].getAttribute('data-mode')===mode;
+        items[i].classList.toggle('active', selected);
+        items[i].setAttribute('aria-checked', selected?'true':'false');
+      }
+      if(fromUser) lsSet('theme', mode);
+      current=mode;
+    }
+    var saved=lsGet('theme');
+    if(saved!=='auto'&&saved!=='light'&&saved!=='dark') saved='auto';
+    applyMode(saved, false);
+    function openMenu(open){ menu.classList.toggle('open',open); btn.setAttribute('aria-expanded', open?'true':'false'); }
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var opening=!menu.classList.contains('open');
+      openMenu(opening);
+      if(opening){ for(var j=0;j<items.length;j++){ if(items[j].getAttribute('data-mode')===current){ items[j].focus(); break; } } }
+    });
+    for(var i=0;i<items.length;i++){
+      items[i].addEventListener('click', function(){ applyMode(this.getAttribute('data-mode'), true); openMenu(false); });
+    }
+    document.addEventListener('click', function(e){ if(!menu.contains(e.target)&&!btn.contains(e.target)) openMenu(false); });
+    document.addEventListener('keydown', function(e){
+      if(e.key==='Escape' && menu.classList.contains('open')){ openMenu(false); btn.focus(); }
+      if(!menu.classList.contains('open') || (e.key!=='ArrowDown' && e.key!=='ArrowUp' && e.key!=='Home' && e.key!=='End')) return;
+      e.preventDefault();
+      var active=document.activeElement, index=Array.prototype.indexOf.call(items,active);
+      if(e.key==='Home') index=0;
+      else if(e.key==='End') index=items.length-1;
+      else { index=(index+(e.key==='ArrowDown'?1:-1)+items.length)%items.length; }
+      items[index].focus();
+    });
+    function onSys(){ if(current==='auto') applyMode('auto', false); }
+    if(mq&&mq.addEventListener){ mq.addEventListener('change', onSys); }
+    else if(mq&&mq.addListener){ mq.addListener(onSys); }
+  })();
+
+  // 后台入口：仅在 URL 带 ?admin=1 时显示齿轮，点击直达真实后台
+  (function(){
+    var fab=$('adminFab');
+    if(!fab) return;
+    if(location.search.indexOf('admin=1')>-1){ fab.classList.add('show'); }
+  })();
+
+  function trackVisit(){
+    try {
+      var url = API_URL.replace(/\/site(?:\.php)?$/, '/visit.php');
+      fetch(url, {method:'POST', cache:'no-store'}).catch(function(){});
+    } catch(e){}
+  }
+
+  (function(){
+    var cfg=loadConfig();
+    currentConfig = cfg;
+    applyConfig(cfg, false);            // 先渲染本地/默认，避免空白闪烁
+    trackVisit();                       // 上报一次访问（页面浏览量）
+    fetchSiteConfig()                  // 再拉后端（后端为唯一真数据源，覆盖本地缓存）
+      .then(function(remote){
+        var merged = Object.assign({}, DEFAULT_CONFIG, remote);
+        currentConfig = merged;
+        saveConfig(merged);             // 缓存一份，下次首屏秒出（只读缓存，不是编辑数据）
+        applyConfig(merged, true);
+        initGuestbook(merged.guestbook);
+      })
+      .catch(function(e){                // 后端不可用：保留本地缓存/默认，仍尝试一言
+        console.error('[首页] 后端配置拉取失败，当前显示为本地缓存/默认配置。错误：', e);
+        if(cfg.useHitokoto) fetchHitokoto();
+      });
+  })();
+  </script>
+</body>
+</html>

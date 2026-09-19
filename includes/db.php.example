@@ -1,0 +1,31 @@
+<?php
+/**
+ * 数据库配置（示例文件）
+ *
+ * ⚠️ 本文件仅用于说明格式，**不要直接重命名为 db.php 使用**。
+ *    实际部署请访问 /install/ 由安装向导自动生成 includes/db.php。
+ *
+ * 若确需手工创建 includes/db.php，请复制下面的常量定义并填入真实值。
+ * ⚠️ includes/db.php 已在 .gitignore 中排除，请勿将其提交到版本库。
+ */
+if (!defined('DB_TYPE')) {
+    define('DB_TYPE', 'mysql');       // 当前仅实现 mysql；留作扩展位
+}
+if (!defined('DB_HOST')) {
+    define('DB_HOST', '127.0.0.1');   // 数据库主机
+}
+if (!defined('DB_PORT')) {
+    define('DB_PORT', '3306');        // 数据库端口
+}
+if (!defined('DB_NAME')) {
+    define('DB_NAME', '');            // 数据库名
+}
+if (!defined('DB_USER')) {
+    define('DB_USER', '');            // 数据库用户名
+}
+if (!defined('DB_PASS')) {
+    define('DB_PASS', '');            // 数据库密码
+}
+if (!defined('DB_QZ')) {
+    define('DB_QZ', '');              // 表名前缀，留空表示不带前缀
+}

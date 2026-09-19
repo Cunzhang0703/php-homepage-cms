@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 上报安全漏洞
+    url: mailto:yangcun0703@163.com
+    about: 请勿通过公开 Issue 上报安全问题，详见 SECURITY.md
+  - name: 📖 阅读文档
+    url: https://github.com/Cunzhang0703/-
+    about: 安装、使用、架构与安全配置说明都放在 docs/ 目录
